@@ -1,17 +1,28 @@
 // Componente PaginacaoUsuarios
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import User from "../../componentes/Card/User/User";
 import Show from "../../componentes/Card/Show/Show";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-const PaginacaoUsuarios = ({ usuarios, filtroEstado, filtroGenero, filtroIdade }) => {
+const PaginacaoUsuarios = ({
+  usuarios,
+  filtroEstado,
+  filtroGenero,
+  filtroIdade,
+}) => {
   const [paginaAtual, setPaginaAtual] = useState(1);
+  const [filtroOrdem, setFiltroOrdem] = useState("name");
+
+  const handleOrderChange = (event) => {
+    setFiltroOrdem(event.target.value);
+  };
+
+  useEffect(() => {}, [filtroOrdem]);
 
   if (!Array.isArray(usuarios)) {
     return null;
   }
   // Filtrar os resultados com base no estado selecionado
   function resultadosFiltrados() {
-    console.log(filtroIdade)
     let resultadosFiltrados = usuarios;
     if (filtroEstado !== "all") {
       resultadosFiltrados = resultadosFiltrados.filter(
@@ -41,17 +52,33 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado, filtroGenero, filtroIdade }
       );
     }
 
+    if (filtroOrdem === "name") {
+      resultadosFiltrados.sort((a, b) => {
+        const nomeA = `${a.name.first} ${a.name.last}`;
+        const nomeB = `${b.name.first} ${b.name.last}`;
+        return nomeA.localeCompare(nomeB);
+      });
+    } else if (filtroOrdem === "city") {
+      resultadosFiltrados.sort((a, b) => {
+        const cityA = a.location.city ? a.location.city.toString() : "";
+        const cityB = b.location.city ? b.location.city.toString() : "";
+        return cityA.localeCompare(cityB);
+      });
+    } else if (filtroOrdem === "age") {
+      resultadosFiltrados.sort((a, b) => a.dob.age - b.dob.age);
+    }
+
     return resultadosFiltrados;
   }
-
-  const resultadosFiltradosArray = resultadosFiltrados();
-  const totalItens = resultadosFiltradosArray.length;
+  const sortedData = resultadosFiltrados();
+  const sortedDataArray = sortedData;
+  const totalItens = sortedDataArray.length;
 
   const itensPorPagina = 9;
   const totalPages = Math.ceil(totalItens / itensPorPagina);
   const indiceUltimoItem = paginaAtual * itensPorPagina;
   const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
-  const itensPaginaAtual = resultadosFiltradosArray.slice(
+  const itensPaginaAtual = sortedData.slice(
     indicePrimeiroItem,
     indiceUltimoItem
   );
@@ -73,7 +100,12 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado, filtroGenero, filtroIdade }
 
   return (
     <div>
-      <Show atual={atual} total={totalItens} />
+      <Show
+        atual={atual}
+        total={totalItens}
+        onFilter={() => {}}
+        handleOrderChange={handleOrderChange}
+      />
       <div className="display-user">
         {itensPaginaAtual.map((item) => (
           <User key={item.email} item={item} />

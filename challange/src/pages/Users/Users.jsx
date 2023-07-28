@@ -9,11 +9,18 @@ function Users() {
   const [filtroEstado, setFiltroState] = useState("all");
   const [filtroGenero, setFiltroGenero] = useState("all");
   const [filtroIdade, setFiltroIdade] = useState("all");
+  const [filtroOrdem, setFiltroOrdem] = useState("name");
 
-  const handleFilterChange = (filtroEstado, filtroGenero, filtroIdade) => {
+  const handleFilterChange = (
+    filtroEstado,
+    filtroGenero,
+    filtroIdade,
+    filtroOrdem
+  ) => {
     setFiltroState(filtroEstado);
     setFiltroGenero(filtroGenero);
     setFiltroIdade(filtroIdade);
+    setFiltroOrdem(filtroOrdem);
   };
 
   return (
@@ -28,6 +35,7 @@ function Users() {
               filtroEstado={filtroEstado}
               filtroGenero={filtroGenero}
               filtroIdade={filtroIdade}
+              filtroOrdem={filtroOrdem}
             />
           </div>
         </div>
