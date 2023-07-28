@@ -74,7 +74,7 @@ const PaginacaoUsuarios = ({
   const sortedDataArray = sortedData;
   const totalItens = sortedDataArray.length;
 
-  const itensPorPagina = 9;
+  const itensPorPagina = 6;
   const totalPages = Math.ceil(totalItens / itensPorPagina);
   const indiceUltimoItem = paginaAtual * itensPorPagina;
   const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
