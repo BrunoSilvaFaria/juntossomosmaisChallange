@@ -1,26 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Conteiner } from "./styles";
-function Show(props) {
+
+function Show({ atual, total, onFilter, handleOrderChange }) {
+  const [selectOrder, setSelectOrder] = useState("name");
+
+  const handleSelect = (event) => {
+    setSelectOrder(event.target.value);
+  };
+  useEffect(() => {
+    onFilter(selectOrder);
+  }, [selectOrder]);
   return (
     <Conteiner>
       <div className="align">
         <p>
-          Exibindo <span>{props.atual}</span> de <span>{props.total}</span>{" "}
+          Exibindo <span>{atual}</span> de <span>{total}</span>{" "}
           itens
         </p>
 
         <div className="conteiner-select">
-          <label for="order">Ordenar por:</label>
-          <select name="order" id="order">
-            <option value="name" onChange={props.function}>
-              Nome
-            </option>
-            <option value="city" onChange={props.function}>
-              Cidade
-            </option>
-            <option value="age" onChange={props.function}>
-              Idade
-            </option>
+          <label htmlFor="order">Ordenar por:</label>
+          <select name="order" id="order" onChange={handleOrderChange}>
+            <option value="name">Nome</option>
+            <option value="city">Cidade</option>
+            <option value="age">Idade</option>
           </select>
         </div>
       </div>
@@ -28,4 +31,4 @@ function Show(props) {
   );
 }
 
-export default Show
+export default Show;
