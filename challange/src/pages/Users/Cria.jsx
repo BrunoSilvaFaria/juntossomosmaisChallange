@@ -19,17 +19,23 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado }) => {
 
   const totalItens = resultadosFiltrados.length;
   const totalPages = Math.ceil(totalItens / itensPorPagina);
-  let indiceUltimoItem
-  if (totalItens > 9) {
-    indiceUltimoItem = paginaAtual * itensPorPagina;
-  } else {
-    indiceUltimoItem = paginaAtual / itensPorPagina;
-  }
+  const indiceUltimoItem = paginaAtual * itensPorPagina;
   const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
   const itensPaginaAtual = resultadosFiltrados.slice(
     indicePrimeiroItem,
     indiceUltimoItem
   );
+
+  let atual
+  if (totalItens <= itensPorPagina) {
+    atual = totalItens
+  } else if (paginaAtual === 1) {
+    atual = itensPorPagina;
+  } else if (itensPaginaAtual.length % itensPorPagina === 0) {
+    atual = paginaAtual * itensPorPagina;
+  } else {
+    atual = totalItens;
+  }
 
   const handlePageChange = (pageNumber) => {
     setPaginaAtual(pageNumber);
@@ -37,7 +43,7 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado }) => {
   
   return (
     <div>
-      <Show atual={indiceUltimoItem} total={totalItens} />
+      <Show atual={atual} total={totalItens} />
       <div className="display-user">
         {itensPaginaAtual.map((item) => (
           <User key={item.email} item={item} />
@@ -53,7 +59,7 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado }) => {
           <MdKeyboardArrowLeft className="icon" />
         </button>
         <button
-          className="btn"
+          className={`btn ${paginaAtual === totalPages ? "btn-desactive" : ""}`}
           disabled={paginaAtual === totalPages}
           onClick={() => handlePageChange(paginaAtual + 1)}
         >
