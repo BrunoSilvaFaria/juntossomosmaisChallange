@@ -13,6 +13,7 @@ export const Conteiner = styled.header`
     ${displayFlex};
     align-items: flex-start;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   .display-user {
     ${displayFlex};

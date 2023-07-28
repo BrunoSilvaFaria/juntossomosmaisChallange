@@ -6,10 +6,14 @@ import data from "../../helpers/user.json";
 import PaginacaoUsuarios from "./Cria";
 
 function Users() {
-  const [filtroEstado, setFiltroEstado] = useState("all");
+  const [filtroEstado, setFiltroState] = useState("all");
+  const [filtroGenero, setFiltroGenero] = useState("all");
+  const [filtroIdade, setFiltroIdade] = useState("all");
 
-  const handleFilterChange = (valorSelecionado) => {
-    setFiltroEstado(valorSelecionado);
+  const handleFilterChange = (filtroEstado, filtroGenero, filtroIdade) => {
+    setFiltroState(filtroEstado);
+    setFiltroGenero(filtroGenero);
+    setFiltroIdade(filtroIdade);
   };
 
   return (
@@ -22,6 +26,8 @@ function Users() {
             <PaginacaoUsuarios
               usuarios={data.results}
               filtroEstado={filtroEstado}
+              filtroGenero={filtroGenero}
+              filtroIdade={filtroIdade}
             />
           </div>
         </div>

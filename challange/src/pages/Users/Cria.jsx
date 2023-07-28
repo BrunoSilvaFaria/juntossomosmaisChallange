@@ -3,32 +3,62 @@ import React, { useState } from "react";
 import User from "../../componentes/Card/User/User";
 import Show from "../../componentes/Card/Show/Show";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-const PaginacaoUsuarios = ({ usuarios, filtroEstado }) => {
-  const itensPorPagina = 9;
+const PaginacaoUsuarios = ({ usuarios, filtroEstado, filtroGenero, filtroIdade }) => {
   const [paginaAtual, setPaginaAtual] = useState(1);
 
   if (!Array.isArray(usuarios)) {
     return null;
   }
-
   // Filtrar os resultados com base no estado selecionado
-  const resultadosFiltrados =
-    filtroEstado === "all"
-      ? usuarios
-      : usuarios.filter((item) => item.location.state === filtroEstado);
+  function resultadosFiltrados() {
+    console.log(filtroIdade)
+    let resultadosFiltrados = usuarios;
+    if (filtroEstado !== "all") {
+      resultadosFiltrados = resultadosFiltrados.filter(
+        (item) => item.location.state === filtroEstado
+      );
+    }
 
-  const totalItens = resultadosFiltrados.length;
+    if (filtroIdade !== "all") {
+      if (filtroIdade === "18") {
+        resultadosFiltrados = resultadosFiltrados.filter(
+          (item) => item.dob.age >= 18 && item.dob.age < 30
+        );
+      } else if (filtroIdade === "30") {
+        resultadosFiltrados = resultadosFiltrados.filter(
+          (item) => item.dob.age >= 30 && item.dob.age < 50
+        );
+      } else if (filtroIdade === "50") {
+        resultadosFiltrados = resultadosFiltrados.filter(
+          (item) => item.dob.age >= 50
+        );
+      }
+    }
+
+    if (filtroGenero !== "all") {
+      resultadosFiltrados = resultadosFiltrados.filter(
+        (item) => item.gender === filtroGenero
+      );
+    }
+
+    return resultadosFiltrados;
+  }
+
+  const resultadosFiltradosArray = resultadosFiltrados();
+  const totalItens = resultadosFiltradosArray.length;
+
+  const itensPorPagina = 9;
   const totalPages = Math.ceil(totalItens / itensPorPagina);
   const indiceUltimoItem = paginaAtual * itensPorPagina;
   const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
-  const itensPaginaAtual = resultadosFiltrados.slice(
+  const itensPaginaAtual = resultadosFiltradosArray.slice(
     indicePrimeiroItem,
     indiceUltimoItem
   );
 
-  let atual
+  let atual;
   if (totalItens <= itensPorPagina) {
-    atual = totalItens
+    atual = totalItens;
   } else if (paginaAtual === 1) {
     atual = itensPorPagina;
   } else if (itensPaginaAtual.length % itensPorPagina === 0) {
@@ -40,7 +70,7 @@ const PaginacaoUsuarios = ({ usuarios, filtroEstado }) => {
   const handlePageChange = (pageNumber) => {
     setPaginaAtual(pageNumber);
   };
-  
+
   return (
     <div>
       <Show atual={atual} total={totalItens} />
