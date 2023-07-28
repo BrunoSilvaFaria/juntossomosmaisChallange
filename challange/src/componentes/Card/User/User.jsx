@@ -3,8 +3,10 @@ import { Conteiner } from "./styles";
 function User(props) {
   
   function capitalizeString(str) {
-    return str.replace(/\b\w/g, (match) => match.toUpperCase());
+    return str.replace(/(^|\s)\S/g, (match) => match.toUpperCase());
   }
+
+
   function inverterOrdemNumeroRua(str) {
     // Usando expressão regular para separar o número e a rua
     const regex = /(\d+)\s+(.*?)\s*$/;
