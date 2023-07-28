@@ -40,8 +40,8 @@ function User(props) {
           {capitalizeString(props.item.location.city)}
         </span>
         <span className="state">
-          {capitalizeString(props.item.location.state)} 
-          <span> - </span>  
+          {capitalizeString(props.item.location.state)}
+          <span> - </span>
           <span className="postcode">CEP: {props.item.location.postcode}</span>
         </span>
       </div>
